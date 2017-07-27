@@ -4,10 +4,10 @@ from otree.api import (
 )
 
 import random
-author = 'Your name here'
+author = 'H.Rauhut, G.Kanitsar, Ph.Chapkovski, University of Zurich'
 
 doc = """
-Your app description
+Whistleblowing game
 """
 
 
@@ -37,7 +37,7 @@ class Group(BaseGroup):
 
     def decision_maker(self):
         return [p for p in self.get_players()
-                if p.id_in_group == self.who_decides][0]
+            if p.id_in_group == self.who_decides][0]
 
     def decision(self):
         decision = self.decision_maker().action
