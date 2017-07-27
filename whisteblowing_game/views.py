@@ -4,14 +4,6 @@ from ._builtin import Page, WaitPage
 from .models import Constants
 
 
-def decision_maker(g):
-    return [p for p in g.get_players() if p.id_in_group == g.who_decides][0]
-
-
-def decision(g):
-    decision = decision_maker(g).action
-    decision_text = Constants.ACTION_CHOICES[decision][1]
-    return decision_text
 
 
 class Stealing(Page):
@@ -36,7 +28,7 @@ class Punish(Page):
 
     def is_displayed(self):
          return (self.player.id_in_group != self.group.who_thief
-                 and decision(self.group) == 'Whisteblow'
+                 and self.group.decision() == 'Whisteblow'
                  )
 
 
@@ -47,12 +39,12 @@ class Reward(Page):
     def is_displayed(self):
         return (self.player.id_in_group != self.group.who_thief
                 and self.session.config['treatment'] == 'Public'
-                and decision_maker(self.group).id_in_group !=
+                and self.group.decision_maker().id_in_group !=
                 self.player.id_in_group)
 
     def vars_for_template(self):
         return {
-            'decision_text': decision(self.group)
+            'decision_text': self.group.decision()
         }
 
 

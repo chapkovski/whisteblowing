@@ -35,6 +35,15 @@ class Group(BaseGroup):
     who_thief = models.IntegerField()
     stealing = models.BooleanField(verbose_name='Would you like to steal the entire pot?')
 
+    def decision_maker(self):
+        return [p for p in self.get_players()
+                if p.id_in_group == self.who_decides][0]
+
+    def decision(self):
+        decision = self.decision_maker().action
+        decision_text = Constants.ACTION_CHOICES[decision][1]
+        return decision_text
+
 class Player(BasePlayer):
     action = models.IntegerField(
                                  choices=Constants.ACTION_CHOICES,
