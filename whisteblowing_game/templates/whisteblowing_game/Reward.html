@@ -2,10 +2,13 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-    Results
+    Rewarding the player who made an action
 {% endblock %}
 
 {% block content %}
+<h3>The player has decided:: {{decision_text}}</h3>
+  {{form}}
 
     {% next_button %}
+
 {% endblock %}

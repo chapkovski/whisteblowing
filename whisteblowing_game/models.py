@@ -3,7 +3,7 @@ from otree.api import (
     Currency as c, currency_range
 )
 
-
+import random
 author = 'Your name here'
 
 doc = """
@@ -13,12 +13,21 @@ Your app description
 
 class Constants(BaseConstants):
     name_in_url = 'whisteblowing_game'
-    players_per_group = None
+    players_per_group = 4
     num_rounds = 1
+    ACTION_CHOICES = [(0, 'Abstain'), (1, 'Whisteblow'), (2, 'Punish directly')]
+    PUNISH_CHOICES = [(False, 'Not punish'), (True, 'Punish')]
 
 
 class Subsession(BaseSubsession):
-    pass
+    ...
+
+    def before_session_starts(self):
+        for g in self.get_groups():
+            g.who_thief = random.randint(1, Constants.players_per_group)
+            non_thiefs = [p for p in g.get_players()
+                          if p.id_in_group != g.who_thief]
+            g.who_decides = random.choice(non_thiefs).id_in_group
 
 
 class Group(BaseGroup):
@@ -26,13 +35,10 @@ class Group(BaseGroup):
     who_thief = models.IntegerField()
     stealing = models.BooleanField(verbose_name='Would you like to steal the entire pot?')
 
-
 class Player(BasePlayer):
-    ACTION_CHOICES = [(1, 'Abstain'), (2, 'Whisteblow'), (3, 'Punish directly')]
-    PUNISH_CHOICES = [(False, 'Not punish'), (True, 'Punish')]
     action = models.IntegerField(
-                                 choices=ACTION_CHOICES,
+                                 choices=Constants.ACTION_CHOICES,
                                  widget=widgets.RadioSelect(),)
-    punish = models.BooleanField(choices=PUNISH_CHOICES,
+    punish = models.BooleanField(choices=Constants.PUNISH_CHOICES,
                                  widget=widgets.RadioSelect(),)
     reward = models.IntegerField()

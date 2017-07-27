@@ -4,34 +4,56 @@ from ._builtin import Page, WaitPage
 from .models import Constants
 
 
+def decision_maker(g):
+    return [p for p in g.get_players() if p.id_in_group == g.who_decides][0]
+
+
+def decision(g):
+    decision = decision_maker(g).action
+    decision_text = Constants.ACTION_CHOICES[decision][1]
+    return decision_text
+
+
 class Stealing(Page):
+    form_model = models.Group
+    form_fields = ['stealing']
+
     def is_displayed(self):
         return self.player.id_in_group == self.group.who_thief
 
 
 class Action(Page):
+    form_model = models.Player
+    form_fields = ['action']
+
     def is_displayed(self):
         return self.player.id_in_group != self.group.who_thief
-
 
 
 class Punish(Page):
-    def is_displayed(self):i)
-         decision_maker = [p for p in self.group.get_players() if p.id_in_group == self.group.who_decides][0]
-         return self.player.id_in_group != self.group.who_thief and if decision_maker.action == 2
+    form_model = models.Player
+    form_fields = ['punish']
+
+    def is_displayed(self):
+         return (self.player.id_in_group != self.group.who_thief
+                 and decision(self.group) == 'Whisteblow'
+                 )
 
 
 class Reward(Page):
+    form_model = models.Player
+    form_fields = ['reward']
+
     def is_displayed(self):
-        return self.player.id_in_group != self.group.who_thief
+        return (self.player.id_in_group != self.group.who_thief
+                and self.session.config['treatment'] == 'Public'
+                and decision_maker(self.group).id_in_group !=
+                self.player.id_in_group)
 
-
-
-
-class ResultsWaitPage(WaitPage):
-
-    def after_all_players_arrive(self):
-        pass
+    def vars_for_template(self):
+        return {
+            'decision_text': decision(self.group)
+        }
 
 
 class Results(Page):
@@ -39,7 +61,11 @@ class Results(Page):
 
 
 page_sequence = [
-    MyPage,
-    ResultsWaitPage,
-    Results
-]
+    Stealing,
+    Action,
+    WaitPage,
+    Punish,
+    Reward,
+    WaitPage,
+    Results,
+    ]

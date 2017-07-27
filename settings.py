@@ -2,7 +2,7 @@ import os
 from os import environ
 
 import dj_database_url
-#from boto.mturk import qualification
+from boto.mturk import qualification
 
 import otree.settings
 
@@ -22,7 +22,7 @@ ADMIN_USERNAME = 'admin'
 ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD')
 
 # don't share this with anybody.
-SECRET_KEY = 'k)gb^q17gg9yfa8b*^_6ed!5v2%7$s==@pmsay8bhe$56yfzss'
+SECRET_KEY = 'wsx(8w-g%p$0&e2l$pbxz!fl-#nbp&*$%@!hzi9w@k_4ah8rrb'
 
 DATABASES = {
     'default': dj_database_url.config(
@@ -88,8 +88,6 @@ mturk_hit_settings = {
     'minutes_allotted_per_assignment': 60,
     'expiration_hours': 7*24,  # 7 days
     # 'grant_qualification_id': 'YOUR_QUALIFICATION_ID_HERE',# to prevent retakes
-    # to use qualification requirements, you need to uncomment the 'qualification' import
-    # at the top of this file.
     'qualification_requirements': [
         # qualification.LocaleRequirement("EqualTo", "US"),
         # qualification.PercentAssignmentsApprovedRequirement("GreaterThanOrEqualTo", 50),
@@ -113,10 +111,18 @@ SESSION_CONFIG_DEFAULTS = {
 
 SESSION_CONFIGS = [
     {
-        'name': 'whisteblowing_game',
-        'display_name': 'whisteblowing_game',
+        'name': 'whisteblowing_private',
+        'display_name': 'Whisteblowing game  - Private',
         'num_demo_participants': 4,
         'app_sequence': ['whisteblowing_game'],
+        'treatment': 'Private',
+    },
+    {
+        'name': 'whisteblowing_public',
+        'display_name': 'Whisteblowing game - Public',
+        'num_demo_participants': 4,
+        'app_sequence': ['whisteblowing_game'],
+        'treatment': 'Public',
     }
 ]
 
