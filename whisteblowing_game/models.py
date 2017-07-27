@@ -22,8 +22,17 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
-    pass
+    who_decides = models.IntegerField()
+    who_thief = models.IntegerField()
+    stealing = models.BooleanField(verbose_name='Would you like to steal the entire pot?')
 
 
 class Player(BasePlayer):
-    pass
+    ACTION_CHOICES = [(1, 'Abstain'), (2, 'Whisteblow'), (3, 'Punish directly')]
+    PUNISH_CHOICES = [(False, 'Not punish'), (True, 'Punish')]
+    action = models.IntegerField(
+                                 choices=ACTION_CHOICES,
+                                 widget=widgets.RadioSelect(),)
+    punish = models.BooleanField(choices=PUNISH_CHOICES,
+                                 widget=widgets.RadioSelect(),)
+    reward = models.IntegerField()

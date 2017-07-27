@@ -4,8 +4,28 @@ from ._builtin import Page, WaitPage
 from .models import Constants
 
 
-class MyPage(Page):
-    pass
+class Stealing(Page):
+    def is_displayed(self):
+        return self.player.id_in_group == self.group.who_thief
+
+
+class Action(Page):
+    def is_displayed(self):
+        return self.player.id_in_group != self.group.who_thief
+
+
+
+class Punish(Page):
+    def is_displayed(self):i)
+         decision_maker = [p for p in self.group.get_players() if p.id_in_group == self.group.who_decides][0]
+         return self.player.id_in_group != self.group.who_thief and if decision_maker.action == 2
+
+
+class Reward(Page):
+    def is_displayed(self):
+        return self.player.id_in_group != self.group.who_thief
+
+
 
 
 class ResultsWaitPage(WaitPage):
