@@ -37,11 +37,10 @@ class Group(BaseGroup):
 
     def decision_maker(self):
         return [p for p in self.get_players()
-            if p.id_in_group == self.who_decides][0]
+                if p.id_in_group == self.who_decides][0]
 
     def decision(self):
-        decision = self.decision_maker().action
-        decision_text = Constants.ACTION_CHOICES[decision][1]
+        decision_text = self.decision_maker().get_action_display()
         return decision_text
 
 class Player(BasePlayer):
