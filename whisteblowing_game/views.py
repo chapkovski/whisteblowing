@@ -27,9 +27,10 @@ class Punish(Page):
     form_fields = ['punish']
 
     def is_displayed(self):
-         return (self.player.id_in_group != self.group.who_thief
-                 and self.group.decision() == 'Whisteblow'
-                 )
+        print('#####:: ', self.player.get_action_display())
+        return (self.player.id_in_group != self.group.who_thief
+                and self.group.decision() == 'Whisteblow'
+                )
 
 
 class Reward(Page):
