@@ -29,8 +29,12 @@ class Punish(Page):
     def is_displayed(self):
         print('#####:: ', self.player.get_action_display())
         return (self.player.id_in_group != self.group.who_thief
-                and self.group.decision() == 'Whisteblow'
+                and self.group.decision() == 'Report'
                 )
+
+class ResultsWaitPage(WaitPage):
+    def after_all_players_arrive(self):
+        self.group.set_payoffs()
 
 
 class Reward(Page):
@@ -58,6 +62,7 @@ page_sequence = [
     Action,
     WaitPage,
     Punish,
+    ResultsWaitPage,
     Reward,
     WaitPage,
     Results,

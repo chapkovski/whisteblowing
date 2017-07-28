@@ -2,12 +2,34 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-    Punishing the thief
+    Your Decision to Sanction!
 {% endblock %}
 
 {% block content %}
-{{form}}
+    {% if player.id_in_group == group.who_decides %}
+    <p>
+        The Taker chose <i>Take</i>. You have been selected as Observer. Your decision was <i>{{ group.decision }}</i>.
+    </p>
+    {% else %}
+    <p>
+        The Taker chose <i>Take</i>. You have not been selected as Observer. The Observer's decision was <i>{{ group.decision }}</i>.
+    </p>
+{% endif %}
 
-    {% next_button %}
+    <p>
+        Now each of the three group members individually decides whether to sanction the Taker.
+        Please indicate whether you want to <i>Sanction</i> or <i>Abstain</i>.
+    </p>
+
+    <p>
+    <div align="center">
+        <button name="punish" value="True" class="btn btn-primary btn-large" style="height:3em; width:8em">Sanction</button>
+        <button name="punish" value="False" class="btn btn-primary btn-large" style="height:3em; width:8em">Abstain</button>
+    </div>
+
+    <p>
+{% include Constants.InstructionsPunish_template %}
 
 {% endblock %}
+
+

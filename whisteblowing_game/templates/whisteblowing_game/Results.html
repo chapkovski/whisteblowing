@@ -7,5 +7,10 @@
 
 {% block content %}
 
+<p>            were you a decision maker? {{ player.is_decision_maker|yesno:'Yes, No' }}</p>
+
+<p>            were you a thief?  {% if group.who_thief == player.id_in_group %} Yes {% else %} No {% endif %} </p>
+
+Your payoff: {{ player.payoff }}
     {% next_button %}
 {% endblock %}

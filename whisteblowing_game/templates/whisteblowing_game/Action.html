@@ -2,11 +2,21 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-    Action towards the thief
+    Your Decision as Observer!
 {% endblock %}
 
 {% block content %}
-{{form}}
-    {% next_button %}
 
+    You have not been randomly selected as the Taker in this Period. However, you can still be randomly chosen as Observer.
+    Please indicate whether you want to <i> Abstain</i>, <i> Report</i> or <i> Sanction</i>.
+
+    <p>
+    <div align="center">
+        <button name="action" value="0" class="btn btn-primary btn-large" style="height:3em; width:8em">Abstain</button>
+        <button name="action" value="1" class="btn btn-primary btn-large" style="height:3em; width:8em">Report</button>
+        <button name="action" value="2" class="btn btn-primary btn-large" style="height:3em; width:8em">Sanction</button>
+    </div>
+
+    <p>
+    {% include Constants.InstructionsAction_template %}
 {% endblock %}

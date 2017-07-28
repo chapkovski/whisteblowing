@@ -15,8 +15,18 @@ class Constants(BaseConstants):
     name_in_url = 'whisteblowing_game'
     players_per_group = 4
     num_rounds = 1
+    personal_endowment = 8
+    common_pool = 36
+    punishment_factor = 4
+    penalty_tokens = 6
+    destruction_factor = 0.5
     ACTION_CHOICES = [(0, 'Abstain'), (1, 'Report'), (2, 'Sanction')]
     PUNISH_CHOICES = [(False, 'Abstain'), (True, 'Sanction')]
+
+    InstructionsStealing_template = 'whisteblowing_game/InstructionsStealing.html'
+    InstructionsAction_template = 'whisteblowing_game/InstructionsAction.html'
+    InstructionsPunish_template = 'whisteblowing_game/InstructionsPunish.html'
+
 
 
 class Subsession(BaseSubsession):
@@ -33,6 +43,7 @@ class Subsession(BaseSubsession):
 class Group(BaseGroup):
     who_decides = models.IntegerField()
     who_thief = models.IntegerField()
+    is_sanctioned = models.BooleanField()
     stealing = models.BooleanField(verbose_name='Please indicate whether you want to Take or Leave the common pool.')
 
     def decision_maker(self):
@@ -43,10 +54,40 @@ class Group(BaseGroup):
         decision_text = self.decision_maker().get_action_display()
         return decision_text
 
+
+    def set_payoffs(self):
+        for p in self.get_players():
+            p.payoff = Constants.personal_endowment
+
+        if self.stealing == 0:
+            for p in self.get_players():
+                p.payoff += (Constants.common_pool/Constants.players_per_group)
+        if self.stealing == 1:
+            if self.decision() == 'Abstain':
+                self.is_sanctioned = False
+            if self.decision() == 'Sanction':
+                self.is_sanctioned = True
+            if self.decision() == 'Report':
+                self.is_sanctioned = max([p.punish or -1 for p in self.get_players()])
+            for p in self.get_players():
+                if self.who_thief == p.id_in_group:
+                    p.payoff += Constants.common_pool * Constants.destruction_factor - \
+                                (Constants.punishment_factor * Constants.penalty_tokens) * self.is_sanctioned
+                else:
+                    p.payoff -= Constants.penalty_tokens *\
+                                                              ((self.decision() == 'Sanction') * p.is_decision_maker() +
+                                                               (self.decision() == 'Report') * (p.punish or 0))
+
+
+
+
+
 class Player(BasePlayer):
     action = models.IntegerField(
-                                 choices=Constants.ACTION_CHOICES,
-                                 widget=widgets.RadioSelect(),)
+                                 choices=Constants.ACTION_CHOICES)
     punish = models.BooleanField(choices=Constants.PUNISH_CHOICES,
-                                 widget=widgets.RadioSelect(),)
+                                 widget=widgets.RadioSelect(),
+                                 )
     reward = models.IntegerField()
+    def is_decision_maker(self):
+        return self.group.who_decides == self.id_in_group
