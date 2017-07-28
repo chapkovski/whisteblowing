@@ -8,4 +8,3 @@ Two treatments:
 - Public (the identity of whisteblower is revealed to the rest of the group)
 
 
-whatever

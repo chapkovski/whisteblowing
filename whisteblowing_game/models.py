@@ -15,8 +15,8 @@ class Constants(BaseConstants):
     name_in_url = 'whisteblowing_game'
     players_per_group = 4
     num_rounds = 1
-    ACTION_CHOICES = [(0, 'Abstain'), (1, 'Whisteblow'), (2, 'Punish directly')]
-    PUNISH_CHOICES = [(False, 'Not punish'), (True, 'Punish')]
+    ACTION_CHOICES = [(0, 'Abstain'), (1, 'Report'), (2, 'Sanction')]
+    PUNISH_CHOICES = [(False, 'Abstain'), (True, 'Sanction')]
 
 
 class Subsession(BaseSubsession):
@@ -33,7 +33,7 @@ class Subsession(BaseSubsession):
 class Group(BaseGroup):
     who_decides = models.IntegerField()
     who_thief = models.IntegerField()
-    stealing = models.BooleanField(verbose_name='Would you like to steal the entire pot?')
+    stealing = models.BooleanField(verbose_name='Please indicate whether you want to Take or Leave the common pool.')
 
     def decision_maker(self):
         return [p for p in self.get_players()
