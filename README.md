@@ -6,3 +6,6 @@ The code for the 'stealing-punishing' game.
 Two treatments:
 - Private
 - Public (the identity of whisteblower is revealed to the rest of the group)
+
+
+whatever
