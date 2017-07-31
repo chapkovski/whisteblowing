@@ -22,6 +22,8 @@ class Constants(BaseConstants):
     destruction_factor = 0.5
     ACTION_CHOICES = [(0, 'Abstain'), (1, 'Report'), (2, 'Sanction')]
     PUNISH_CHOICES = [(False, 'Abstain'), (True, 'Sanction')]
+    REWARD_CHOICES = [(-2, 'Send 2 Deduction Points'), (-1, 'Send 1 Deduction Point'), (0, 'Send No Points'), (1, 'Send 1 Addition Point'), (2, 'Send 2 Addition Points')]
+
 
     InstructionsStealing_template = 'whisteblowing_game/InstructionsStealing.html'
     InstructionsAction_template = 'whisteblowing_game/InstructionsAction.html'
@@ -77,9 +79,12 @@ class Group(BaseGroup):
                     p.payoff -= Constants.penalty_tokens *\
                                                               ((self.decision() == 'Sanction') * p.is_decision_maker() +
                                                                (self.decision() == 'Report') * (p.punish or 0))
-
-
-
+            if self.session.config['treatment'] == 'Public':
+                for p in self.get_players():
+                    if self.who_decides == p.id_in_group:
+                        p.payoff += 3*sum([p.reward or 0 for p in self.get_players() if self.who_decides != p.id_in_group and self.who_thief != p.id_in_group])
+                    if self.who_decides != p.id_in_group and self.who_thief != p.id_in_group:
+                        p.payoff -= abs(p.reward or 0)
 
 
 class Player(BasePlayer):
@@ -88,6 +93,9 @@ class Player(BasePlayer):
     punish = models.BooleanField(choices=Constants.PUNISH_CHOICES,
                                  widget=widgets.RadioSelect(),
                                  )
-    reward = models.IntegerField()
+    reward = models.IntegerField(
+                                choices=Constants.REWARD_CHOICES)
+
     def is_decision_maker(self):
         return self.group.who_decides == self.id_in_group
+

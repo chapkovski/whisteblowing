@@ -12,5 +12,10 @@
 <p>            were you a thief?  {% if group.who_thief == player.id_in_group %} Yes {% else %} No {% endif %} </p>
 
 Your payoff: {{ player.payoff }}
+
+    <p>            what did the first player do to reward? {{ firstreward}} </p>
+
+    <p>            what did the second player do to reward? {{ secondreward}} </p>
+
     {% next_button %}
 {% endblock %}

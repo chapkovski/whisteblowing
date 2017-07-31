@@ -18,14 +18,11 @@
 
     <p>
         Now each of the three group members individually decides whether to sanction the Taker.
-        Please indicate whether you want to <i>Sanction</i> or <i>Abstain</i>.
     </p>
 
-    <p>
-    <div align="center">
-        <button name="punish" value="True" class="btn btn-primary btn-large" style="height:3em; width:8em">Sanction</button>
-        <button name="punish" value="False" class="btn btn-primary btn-large" style="height:3em; width:8em">Abstain</button>
-    </div>
+    {% formfield player.punish with label="Please indicate whether you want to <i>Sanction</i> or <i>Abstain</i>." %}
+
+    {% next_button %}
 
     <p>
 {% include Constants.InstructionsPunish_template %}
