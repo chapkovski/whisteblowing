@@ -2,7 +2,7 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-    SOME HEADLINE
+    Send Deduction or Addition Points to Observer
 {% endblock %}
 
 {% block content %}
@@ -18,5 +18,8 @@
         Enter your decision to send Deduction or Addition Points to the Observer. </p>
 {% formfield player.reward with label="Enter your decision to send Deduction or Addition Points to the Observer:" %}
     {% next_button %}
+
+        {% include Constants.InstructionsReward_template %}
+
 
 {% endblock %}

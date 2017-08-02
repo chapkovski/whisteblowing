@@ -7,13 +7,12 @@
 
 {% block content %}
 
-    You have been randomly selected as the Taker in this Period. Please indicate whether you want to <i> Take </i> or <i> Leave</i>.
+    You have been randomly selected as the Taker in this Period.
     <p>
-    <div align="center">
-        <button name="stealing" value="True" class="btn btn-primary btn-large" style="height:3em; width:8em">Take</button>
-        <button name="stealing" value="False" class="btn btn-primary btn-large" style="height:3em; width:8em">Leave</button>
-    </div>
 
+{% formfield group.stealing with label="Enter your decision to Leave or Take:" %}
     <p>
+        {% next_button %}
+
     {% include Constants.InstructionsStealing_template %}
 {% endblock %}

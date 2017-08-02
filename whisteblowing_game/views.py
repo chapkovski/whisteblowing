@@ -4,7 +4,8 @@ from ._builtin import Page, WaitPage
 from .models import Constants
 
 
-
+class Introduction(Page):
+    pass
 
 class Stealing(Page):
     form_model = models.Group
@@ -62,14 +63,28 @@ class Results(Page):
 
     def vars_for_template(self):
         return {
-            'firstreward': [p.reward or -1 for p in self.group.get_players()
+            'observer_decision':
+                [p.punish for p in self.group.get_players() if p.id_in_group == self.group.who_decides][0],
+            'number_punishments': sum([p.punish or 0 for p in self.group.get_players()]),
+            'Treat': self.session.config['treatment'],
+            'firstreward': [p.get_reward_display for p in self.group.get_players()
                             if p.id_in_group != self.group.who_decides and p.id_in_group != self.group.who_thief][0],
-            'secondreward': [p.reward for p in self.group.get_players()
-                             if p.id_in_group != self.group.who_decides and p.id_in_group != self.group.who_thief][1]
+            'secondreward': [p.get_reward_display for p in self.group.get_players()
+                             if p.id_in_group != self.group.who_decides and p.id_in_group != self.group.who_thief][1],
+            'takerpayoff': [p.payoff for p in self.group.get_players()
+                            if p.id_in_group == self.group.who_thief][0],
+            'observerpayoff': [p.payoff for p in self.group.get_players()
+                            if p.id_in_group == self.group.who_decides][0],
+            'firstbystander': [p.payoff for p in self.group.get_players()
+                             if p.id_in_group != self.group.who_decides and p.id_in_group != self.group.who_thief][0],
+            'secondbystander': [p.payoff for p in self.group.get_players()
+                               if p.id_in_group != self.group.who_decides and p.id_in_group != self.group.who_thief][1],
         }
 
 
+
 page_sequence = [
+    Introduction,
     Stealing,
     Action,
     WaitPage,

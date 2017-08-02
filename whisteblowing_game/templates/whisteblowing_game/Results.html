@@ -7,15 +7,42 @@
 
 {% block content %}
 
-<p>            were you a decision maker? {{ player.is_decision_maker|yesno:'Yes, No' }}</p>
+    <p> In this period, {%  if player.id_in_group == group.who_thief %} your decision as Taker {% else %} the Taker's decision {% endif %} was to <i>{{ group.stealing|yesno:'Take, Leave'}}</i>.</p>
 
-<p>            were you a thief?  {% if group.who_thief == player.id_in_group %} Yes {% else %} No {% endif %} </p>
+    {% if group.stealing == 1 %}
+        <p> {% if player.is_decision_maker == 1 %} Your decision as Observer {% else %} The Observer's decision {% endif %} was to <i>{{ group.decision }}</i>. </p>
 
-Your payoff: {{ player.payoff }}
+        {% if group.decision == 'Report' %}
+            <p> Therefore each of the three remaining player chose individually whether to sanction or abstain.
+            Your decision was to {{ player.punish }}
+            The Observer's decision was to {{ group.observer_decision|yesno:'Sanction, Abstain' }}
+            In total {{ number_punishments }} players decided to sanction and paid 6 Points. {{ group.is_sanctioned|yesno:'The Taker lost 24 Points.,' }}</p>
+        {% else %}
+        {% endif %}
+            {% if Treat == 'Public' %}
+                <p>
+                The two players being neither Taker nor Observer {% if player.id_in_group != group.who_thief and player.id_in_group != group.who_decides %} (you) {% endif %} could send up to two Deduction or Addition Points to the Observer.
+                The players sent {{ firstreward }} and {{ secondreward }}.
+                </p>
+            {% else %}
+            {% endif %}
+    {% else %}
 
-    <p>            what did the first player do to reward? {{ firstreward}} </p>
+    {% endif %}
 
-    <p>            what did the second player do to reward? {{ secondreward}} </p>
+    <p>
+        Your final payoff from this period is {{ player.payoff }}.
+        {% if group.who_thief != player.id_in_group %} The Taker's payoff from this period is {{ takerpayoff }}. {% endif %}
+        {% if group.who_decides != player.id_in_group %} The Observer's payoff from this period is {{ observerpayoff }}. {% endif %}
+        {% if group.who_decides == player.id_in_group or group.who_thief == player.id_in_group %}
+            The payoff of the other two players is {{ firstbystander }} and {{ secondbystander }}.
+        {% elif player.payoff == firstbystander %}
+            The payoff of the other player is {{ secondbystander }}.
+        {% elif player.payoff == secondbystander %}
+            The payoff of the other player is {{ firstbystander }}.
+        {% endif %}
+    </p>
+
 
     {% next_button %}
 {% endblock %}

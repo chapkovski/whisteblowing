@@ -22,12 +22,13 @@ class Constants(BaseConstants):
     destruction_factor = 0.5
     ACTION_CHOICES = [(0, 'Abstain'), (1, 'Report'), (2, 'Sanction')]
     PUNISH_CHOICES = [(False, 'Abstain'), (True, 'Sanction')]
-    REWARD_CHOICES = [(-2, 'Send 2 Deduction Points'), (-1, 'Send 1 Deduction Point'), (0, 'Send No Points'), (1, 'Send 1 Addition Point'), (2, 'Send 2 Addition Points')]
-
+    REWARD_CHOICES = [(-2, '2 Deduction Points'), (-1, '1 Deduction Point'), (0, 'No Points'), (1, '1 Addition Point'), (2, '2 Addition Points')]
+    STEALING_CHOICES = [(False, 'Leave'), (True, 'Take')]
 
     InstructionsStealing_template = 'whisteblowing_game/InstructionsStealing.html'
     InstructionsAction_template = 'whisteblowing_game/InstructionsAction.html'
     InstructionsPunish_template = 'whisteblowing_game/InstructionsPunish.html'
+    InstructionsReward_template = 'whisteblowing_game/InstructionsReward.html'
 
 
 
@@ -46,7 +47,7 @@ class Group(BaseGroup):
     who_decides = models.IntegerField()
     who_thief = models.IntegerField()
     is_sanctioned = models.BooleanField()
-    stealing = models.BooleanField(verbose_name='Please indicate whether you want to Take or Leave the common pool.')
+    stealing = models.BooleanField(choices=Constants.STEALING_CHOICES)
 
     def decision_maker(self):
         return [p for p in self.get_players()
@@ -89,12 +90,16 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
     action = models.IntegerField(
-                                 choices=Constants.ACTION_CHOICES)
+                                choices=Constants.ACTION_CHOICES,
+                                widget = widgets.RadioSelect(),
+                                )
     punish = models.BooleanField(choices=Constants.PUNISH_CHOICES,
-                                 widget=widgets.RadioSelect(),
-                                 )
+                                widget=widgets.RadioSelect(),
+                                )
     reward = models.IntegerField(
-                                choices=Constants.REWARD_CHOICES)
+                                choices=Constants.REWARD_CHOICES,
+                                widget = widgets.RadioSelect(),
+                                )
 
     def is_decision_maker(self):
         return self.group.who_decides == self.id_in_group
