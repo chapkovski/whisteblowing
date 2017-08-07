@@ -1,0 +1,22 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+    Welcome to the Study!
+
+{% endblock %}
+
+{% block content %}
+    <h4><b>Instructions (Page 2 of 3)</b></h4>
+
+    {% include Constants.InstructionsPunish_template %}
+    {% include Constants.InstructionsReward_template %}
+
+    <p align="justify"> At the end of the experiment, all players are informed about the decisions of their group members and their payoffs.
+    In the next period, you will play with the same group members. The roles of the Taker and Observer will again be randomly distributed
+    within the group.
+
+    How to create a "previous button" here?
+    {% next_button %}
+
+{% endblock %}

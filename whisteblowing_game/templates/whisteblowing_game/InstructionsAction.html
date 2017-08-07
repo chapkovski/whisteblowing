@@ -1,19 +1,18 @@
 {% load otree_tags staticfiles %}
 
 <div class="instructions well well-lg">
-
-    <h4> Instructions </h4>
-<p>
-    Each of the three group members, which were not selected as Taker, makes this decision. If the Taker chose <i> Take </i>,
-    one of the three players is randomly selected as Observer and his/ her decision is executed. The decisions of the other players are inconsequential.
-    If the Taker chose <i> Leave </i>, the decisions of all three group members are inconsequential.
-</p>
-<p>
-    <i> Abstain</i>: The payoffs remain unchanged. The Taker receives 26 MUs. The Observer and the rest of the group gain 8 MUs. <br>
-    <i> Report</i>: You reveal the identity of the Taker to the rest of the group. Thereafter, each of the three players can individually decide to
-    <i>Sanction</i> the Taker. <br>
-    <i> Sanction</i>: You reduce the payoff of the Taker by 24 MUs (from 26 MUs to 2 MUs). You pay a cost of 6 MUs such that your final payoff is 2 MUs.
-    The payoff of the other two group members are unaffected.
-
-</p>
+    <p align="justify">
+        Each of the three players not selected as Taker decides between three actions as potential <i><b>Observer</b></i>.
+        Although each player makes this decision, only one decision will be randomly chosen and implemented in case the Taker decided to Take.
+        This means, if the Taker chose Take, the decision of one randomly determined player (actual Observer) is executed.
+        The decisions of the other players remain inconsequential. If the Taker chose Leave, the decisions of all three potential Observers are inconsequential.
+        Each player makes a decision as if he/she were the actual Observer.
+    <p>
+    <ul align="justify">
+    <li><i><b>Abstain</b></i>: The payoffs are unaffected. The Taker keeps 26 points. The Observer and the rest of the group receive 8 points. </li>
+    <li><i><b>Report</b></i>: The Observer reveals the Taker to the rest of the group. Thereafter, each of the three players can individually decide to
+    Sanction the Taker (see next page). </li>
+    <li><i><b>Sanction</b></i>: The Observer reduces the payoff of the Taker by 24 points (from 26 points to 2 points). The Observer pays a cost of 6 points. The Observer's final payoff is 2 points.
+    The payoff of the two other players is unaffected.</li>
+    </ul>
 </div>

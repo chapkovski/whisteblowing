@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-
+    <p align="right"> Round {{ round_number }} of {{ Constants.num_rounds }}</p>
     <p>The Observer's decision was: {{decision_text}}</p>
     {% if group.decision == 'Report' %}
     <p>Therefore, each player decided whether to sanction the Taker.

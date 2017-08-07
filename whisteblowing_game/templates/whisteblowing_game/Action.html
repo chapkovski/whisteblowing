@@ -6,10 +6,8 @@
 {% endblock %}
 
 {% block content %}
-
-    You have not been randomly selected as the Taker in this Period. However, you can still be randomly chosen as Observer.
-
-    <p>
+    <p align="right"> Round {{ round_number }} of {{ Constants.num_rounds }}</p>
+    <p align="justify">You have not been randomly selected as Taker in this Period. However, you can still be randomly chosen as Observer.
 {% formfield player.action with label="Enter your decision to Abstain, Report or Sanction:" %}
     <p>
         {% next_button %}

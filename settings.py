@@ -114,14 +114,14 @@ SESSION_CONFIGS = [
         'name': 'whisteblowing_private',
         'display_name': 'Whisteblowing game  - Private',
         'num_demo_participants': 4,
-        'app_sequence': ['whisteblowing_game'],
+        'app_sequence': ['whisteblowing_game', 'survey'],
         'treatment': 'Private',
     },
     {
         'name': 'whisteblowing_public',
         'display_name': 'Whisteblowing game - Public',
         'num_demo_participants': 4,
-        'app_sequence': ['whisteblowing_game'],
+        'app_sequence': ['whisteblowing_game', 'survey'],
         'treatment': 'Public',
     }
 ]

@@ -24,6 +24,10 @@ class Constants(BaseConstants):
     PUNISH_CHOICES = [(False, 'Abstain'), (True, 'Sanction')]
     REWARD_CHOICES = [(-2, '2 Deduction Points'), (-1, '1 Deduction Point'), (0, 'No Points'), (1, '1 Addition Point'), (2, '2 Addition Points')]
     STEALING_CHOICES = [(False, 'Leave'), (True, 'Take')]
+    ANSWERS1 = [(1, 'The Taker gets a payoff of 26. The Observer gets a payoff of 2.'), (2, 'The Taker gets a payoff of 8. The Observer gets a payoff of 2.'), (3, 'The Taker and the Observer receive an equal payoff of 8.'), (4, 'The Taker and the Observer receive an equal payoff of 2.')]
+    ANSWERS2 = [(1, 'One of the two players who sanction is the Observer'), (2, 'Only one of the two players pays the costs of sanctioning.'), (3, 'Both players pay the costs of sanctioning.'), (4, 'It is possible that the Taker will not lose Points.')]
+
+
 
     InstructionsStealing_template = 'whisteblowing_game/InstructionsStealing.html'
     InstructionsAction_template = 'whisteblowing_game/InstructionsAction.html'
@@ -100,7 +104,17 @@ class Player(BasePlayer):
                                 choices=Constants.REWARD_CHOICES,
                                 widget = widgets.RadioSelect(),
                                 )
+    CQ1 = models.IntegerField(choices=Constants.ANSWERS1,
+                                widget=widgets.RadioSelect(),
+                                verbose_name="Question 1: If the Taker chooses Take and the Observer chooses Sanction, which of the following statements is true:",
+                                )
+    CQ2 = models.IntegerField(choices=Constants.ANSWERS2,
+                                widget=widgets.RadioSelect(),
+                                verbose_name="Question 2: Imagine the Taker chooses Take and the Observer chooses Report. If in the following 2 of 3 players decide to Sanction the Taker, which of the following statements is true:",
+                                initial=None
+                                )
 
     def is_decision_maker(self):
         return self.group.who_decides == self.id_in_group
+
 
