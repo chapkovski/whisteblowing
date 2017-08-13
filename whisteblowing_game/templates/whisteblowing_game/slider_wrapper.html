@@ -1,0 +1,14 @@
+{% load staticfiles  %}
+<div>
+  <strong><h3 id='instr_toggler'>Show instructions:</h3></strong>
+</div>
+<label class="switch" >
+  <input type="checkbox" id='instr_check'  >
+  <div class="slider round"></div>
+</label>
+<div id="instructions" class='well well-lg instructions'>
+  {% include 'whisteblowing_game/full_instructions.html'%}
+</div>
+
+<link href="{% static 'css/slider.css' %}" rel="stylesheet">
+<script src="{% static 'js/slider.js' %}"></script>

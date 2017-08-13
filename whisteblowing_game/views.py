@@ -108,7 +108,6 @@ class Results(Page):
 
 page_sequence = [
     Introduction,
-    Introduction2,
     CQs,
     Stealing,
     Action,

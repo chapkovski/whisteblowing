@@ -2,19 +2,23 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-    Welcome to the Study!
+  Instructions
 
 {% endblock %}
 
 {% block content %}
-    <h4><b>Instructions (Page 1 of 3)</b></h4>
+
 
     <p align="justify"> In this study, your income depends on your own decision, as well as the decisions of your group members.
     Throughout the study you will earn points. These points are converted into Dollars at the end of the study at a rate of 1 point = x Dollars. <br>
     In this study, you play in group of 4 players for 15 rounds. The group composition is constant for the entire study. In each round, each player starts with 8 points as personal endowment. In addition, there is a common pool of 36 points.
     At the end of the experiment, you earn the total payoff accumulated in 15 periods.
-    {% include Constants.InstructionsStealing_template %}
-    {% include Constants.InstructionsAction_template %}
+
+  {% include 'whisteblowing_game/full_instructions.html'%}
+
+<p align="justify"> At the end of the experiment, all players are informed about the decisions of their group members and their payoffs.
+In the next period, you will play with the same group members. The roles of the Taker and Observer will again be randomly distributed
+within the group.</p>
 
 
         {% next_button %}

@@ -2,19 +2,18 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-    Welcome to the Study!
-
+Comprehension questions
 {% endblock %}
 
 {% block content %}
-    <h4><b>Instructions (Page 3 of 3)</b></h4>
+
     <p align="justify"> Before the experiment starts, please answer the following questions to ensure that all participants
     have understood the instructions.
 
     {% formfield player.CQ1 %}
     {% formfield player.CQ2 %}
 
-    a previous button
+        {% include 'whisteblowing_game/slider_wrapper.html' %}
     {% next_button %}
 
 {% endblock %}
