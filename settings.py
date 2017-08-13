@@ -85,7 +85,7 @@ mturk_hit_settings = {
     'description': 'Description for your experiment',
     'frame_height': 500,
     'preview_template': 'global/MTurkPreview.html',
-    'minutes_allotted_per_assignment': 60,
+    'minutes_allotted_per_assignment': 40,
     'expiration_hours': 7*24,  # 7 days
     # 'grant_qualification_id': 'YOUR_QUALIFICATION_ID_HERE',# to prevent retakes
     'qualification_requirements': [
@@ -102,8 +102,8 @@ mturk_hit_settings = {
 # e.g. self.session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = {
-    'real_world_currency_per_point': 0.000,
-    'participation_fee': 0.00,
+    'real_world_currency_per_point': 0.025,
+    'participation_fee': 1.00,
     'doc': "",
     'mturk_hit_settings': mturk_hit_settings,
 }
@@ -123,6 +123,12 @@ SESSION_CONFIGS = [
         'num_demo_participants': 4,
         'app_sequence': ['whisteblowing_game', ],
         'treatment': 'Public',
+    },
+    {
+        'name': 'survey',
+        'display_name': 'Survey',
+        'num_demo_participants': 4,
+        'app_sequence': ['survey', ],
     }
 ]
 

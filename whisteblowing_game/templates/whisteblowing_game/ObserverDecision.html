@@ -1,0 +1,16 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+    Your Decision as Observer!
+{% endblock %}
+
+{% block content %}
+    <p align="right"> Round {{ round_number }} of {{ Constants.num_rounds }}</p>
+    <p align="justify">You have not been randomly selected as Taker in this Period. However, you can still be randomly chosen as Observer.
+{% formfield player.action with label="Enter your decision to Abstain, Report or Sanction:" %}
+    <p>
+        {% next_button %}
+
+    {% include Constants.InstructionsAction_template %}
+{% endblock %}

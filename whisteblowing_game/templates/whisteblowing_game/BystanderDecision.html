@@ -1,0 +1,25 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+    Send Deduction or Addition Points to Observer
+{% endblock %}
+
+{% block content %}
+    <p align="right"> Round {{ round_number }} of {{ Constants.num_rounds }}</p>
+    <p>The Observer's decision was: {{decision_text}}</p>
+    {% if group.decision == 'Report' %}
+    <p>Therefore, each player decided whether to sanction the Taker.
+    {{ number_punishments }} players decided to sanction and paid the costs.
+    The Observer chose to {{ group.observer_decision|yesno:'sanction, abstain' }} </p>
+{% endif %}
+    <p> The two group members being neither Taker nor Observer can now send up to two deduction or additions points to the Observer.
+        Please indicate whether you want to send any Deduction or Addition Points to the Observer.
+        Enter your decision to send Deduction or Addition Points to the Observer. </p>
+{% formfield player.reward with label="Enter your decision to send Deduction or Addition Points to the Observer:" %}
+    {% next_button %}
+
+        {% include Constants.InstructionsReward_template %}
+
+
+{% endblock %}
