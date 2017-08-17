@@ -3,8 +3,11 @@ from . import models
 from ._builtin import Page, WaitPage
 from .models import Constants
 
+
 def vars_for_all_templates(self):
-    return {'round_number': self.round_number}
+    max_sections = 3 if self.session.config['treatment'] == 'Public' else 2
+    return {'round_number': self.round_number,
+            'max_sections': max_sections}
 
 
 class Introduction(Page):

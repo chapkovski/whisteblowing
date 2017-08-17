@@ -12,10 +12,12 @@
     <div>
       {% include Constants.InstructionsPunish_template %}
     </div>
+    {% if session.config.treatment == 'Public'%}
     <h3>Stage 4: Sending tokens to Observer</h3>
     <div>
         {% include Constants.InstructionsReward_template %}
     </div>
+    {% endif %}
   </div>
 
 <script>
@@ -26,7 +28,7 @@ active:{{cur_section|default:0}},
 });
 } );
 
-var max_sections = {{max_sections|default:3}};
+  var max_sections = {{max_sections|default:3}};
 
 </script>
 
