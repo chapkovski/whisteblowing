@@ -7,20 +7,34 @@
 {% endblock %}
 
 {% block content %}
-
-
     <p align="justify"> In this study, your income depends on your own decision, as well as the decisions of your group members.
     Throughout the study you will earn points. These points are converted into Dollars at the end of the study at a rate of 1 point = x Dollars. <br>
     In this study, you play in group of 4 players for 15 rounds. The group composition is constant for the entire study. In each round, each player starts with 8 points as personal endowment. In addition, there is a common pool of 36 points.
     At the end of the experiment, you earn the total payoff accumulated in 15 periods.
 
-  {% include 'whisteblowing_game/full_instructions.html'%}
+    {% include 'whisteblowing_game/full_instructions.html'%}
 
-<p align="justify"> At the end of the experiment, all players are informed about the decisions of their group members and their payoffs.
-In the next period, you will play with the same group members. The roles of the Taker and Observer will again be randomly distributed
-within the group.</p>
+    <p align="justify"> At the end of the experiment, all players are informed about the decisions of their group members and their payoffs.
+    In the next period, you will play with the same group members. The roles of the Taker and Observer will again be randomly distributed
+    within the group.</p>
+
+    <button class="btn btn-primary btn-lg" type='button' id='next_instr'>Next</button>
+{% endblock %}
+
+{% block scripts %}
+      <script>
+      $('#next_instr').click(function(){
+        var active = $( "#accordion" ).accordion( "option", "active" );
+        if (active >= max_sections) {$('form#form').submit();};
+      // Setter
+      $( "#accordion" ).accordion( "option", "active", active + 1 );
+      });
+
+      </script>
 
 
-        {% next_button %}
+{% endblock %}
+{% block styles %}
+
 
 {% endblock %}

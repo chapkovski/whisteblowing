@@ -19,7 +19,6 @@
 {% formfield player.reward with label="Enter your decision to send Deduction or Addition Points to the Observer:" %}
     {% next_button %}
 
-        {% include Constants.InstructionsReward_template %}
-
+  {% include 'whisteblowing_game/slider_wrapper.html' with cur_section=3 %}
 
 {% endblock %}

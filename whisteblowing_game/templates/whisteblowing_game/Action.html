@@ -11,6 +11,6 @@
 {% formfield player.action with label="Enter your decision to Abstain, Report or Sanction:" %}
     <p>
         {% next_button %}
+  {% include 'whisteblowing_game/slider_wrapper.html' with cur_section=1%}
 
-    {% include Constants.InstructionsAction_template %}
 {% endblock %}

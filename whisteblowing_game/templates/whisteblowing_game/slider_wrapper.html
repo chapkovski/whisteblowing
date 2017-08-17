@@ -6,9 +6,12 @@
   <input type="checkbox" id='instr_check'  >
   <div class="slider round"></div>
 </label>
-<div id="instructions" class='well well-lg instructions'>
+<div id="instructions" class=' instructions'>
   {% include 'whisteblowing_game/full_instructions.html'%}
 </div>
 
 <link href="{% static 'css/slider.css' %}" rel="stylesheet">
 <script src="{% static 'js/slider.js' %}"></script>
+<style media="screen">
+  #instructions{display:none;}
+</style>
