@@ -30,7 +30,7 @@ class CQs(Page):
             return 'Your answer is not correct. Please try again.'
 
 
-class Stealing(Page):
+class TakerDecision(Page):
     form_model = models.Group
     form_fields = ['stealing']
 
@@ -38,7 +38,7 @@ class Stealing(Page):
         return self.player.id_in_group == self.group.who_thief
 
 
-class Action(Page):
+class ObserverDecision(Page):
     form_model = models.Player
     form_fields = ['action']
 
@@ -46,7 +46,7 @@ class Action(Page):
         return self.player.id_in_group != self.group.who_thief
 
 
-class Punish(Page):
+class DecisionIfReported(Page):
     form_model = models.Player
     form_fields = ['punish']
 
@@ -60,7 +60,7 @@ class RewardWaitPage(WaitPage):
     pass
 
 
-class Reward(Page):
+class BystanderDecision(Page):
     form_model = models.Player
     form_fields = ['reward']
 
@@ -102,19 +102,18 @@ class Results(Page):
                              if p.id_in_group != self.group.who_decides and p.id_in_group != self.group.who_thief][0],
             'secondbystander': [p.payoff for p in self.group.get_players()
                                if p.id_in_group != self.group.who_decides and p.id_in_group != self.group.who_thief][1],
-            'Cum_payoff': sum([p.payoff for p in self.player.in_all_rounds()])
         }
 
 
 page_sequence = [
     Introduction,
     CQs,
-    Stealing,
-    Action,
+    TakerDecision,
+    ObserverDecision,
     WaitPage,
-    Punish,
+    DecisionIfReported,
     RewardWaitPage,
-    Reward,
+    BystanderDecision,
     ResultsWaitPage,
     WaitPage,
     Results,
