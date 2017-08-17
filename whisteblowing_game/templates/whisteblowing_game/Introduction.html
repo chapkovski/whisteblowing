@@ -27,7 +27,11 @@
       <script>
       $('#next_instr').click(function(){
         var active = $( "#accordion" ).accordion( "option", "active" );
-        if (active >= max_sections) {$('form#form').submit();};
+        if (active == max_sections - 1) {
+          $(this).text('Next page');
+          $(this).addClass( "btn-success" );
+      };
+        if (active + 1 >= max_sections) {$('form#form').submit();};
       // Setter
       $( "#accordion" ).accordion( "option", "active", active + 1 );
       });

@@ -1,19 +1,19 @@
 {% load otree_tags staticfiles %}
   <div id="accordion">
-    <h3>Stage 1: Take or Leave decision</h3>
+    <h3 id='Stage1'>Stage 1: Take or Leave decision</h3>
     <div>
         {% include Constants.InstructionsStealing_template %}
     </div>
-    <h3>Stage 2: Observer decision</h3>
+    <h3 id='Stage2'>Stage 2: Observer decision</h3>
     <div>
       {% include Constants.InstructionsAction_template %}
     </div>
-    <h3>Stage 3: Decision if <b>Report</b> decision is made</h3>
+    <h3 id='Stage3'>Stage 3: Decision if <b>Report</b> decision is made</h3>
     <div>
       {% include Constants.InstructionsPunish_template %}
     </div>
     {% if session.config.treatment == 'Public'%}
-    <h3>Stage 4: Sending tokens to Observer</h3>
+    <h3 id='Stage4'>Stage 4: Sending tokens to Observer</h3>
     <div>
         {% include Constants.InstructionsReward_template %}
     </div>
@@ -25,6 +25,19 @@ $( function() {
   $( "#accordion" ).accordion({
 heightStyle: "content",
 active:{{cur_section|default:0}},
+activate: function( event, ui ) {
+  var cur_stage = ui.newHeader.attr('id');
+  var $btn = $('#next_instr');
+  if (cur_stage == 'Stage{{max_sections}}')
+  {
+    $btn.text('Next page');
+    $btn.addClass( "btn-success" );
+  }
+  else {
+    $btn.text('Next');
+    $btn.removeClass( "btn-success" );
+  }
+}
 });
 } );
 

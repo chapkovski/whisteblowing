@@ -5,7 +5,7 @@ from .models import Constants
 
 
 def vars_for_all_templates(self):
-    max_sections = 3 if self.session.config['treatment'] == 'Public' else 2
+    max_sections = 4 if self.session.config['treatment'] == 'Public' else 3
     return {'round_number': self.round_number,
             'max_sections': max_sections}
 
@@ -14,9 +14,7 @@ class Introduction(Page):
     def is_displayed(self):
         return self.round_number == 1
 
-class Introduction2(Page):
-    def is_displayed(self):
-        return self.round_number == 1
+
 
 class CQs(Page):
     form_model = models.Player
