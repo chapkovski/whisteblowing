@@ -6,49 +6,121 @@
 {% endblock %}
 
 {% block content %}
+    <h3>Payoff:</h3>
 
-    <h4><b>Actions:</b></h4>
-    <p> In this round {%  if player.id_in_group == group.who_thief %} your decision as Taker {% else %} the Taker's decision {% endif %} was to {{ group.stealing|yesno:'Take, Leave'}}.
-
-    {% if group.stealing == 1 %}
-        {% if player.is_decision_maker == 1 %} Your decision as Observer {% else %} The Observer's decision {% endif %} was to {{ group.decision }}.
-        <br>
-        {% if group.decision == 'Report' %}
-            <p> Therefore each of the three remaining player chose individually whether to sanction or abstain.
-            Your decision was to {{ player.punish }}
-            The Observer's decision was to {{ group.observer_decision|yesno:'Sanction, Abstain' }}
-            In total {{ number_punishments }} players decided to sanction and paid 6 Points. {{ group.is_sanctioned|yesno:'The Taker lost 24 Points.,' }}</p>
-        {% else %}
+    <table class="table table-hover table-striped">
+        <tr>
+            <td>Initial endowment:</td>
+            <td>+</td>
+            <td>{{ Constants.personal_endowment }}</td>
+        </tr>
+        <tr>
+            <td>Your share from common pool:</td>
+            <td>+</td>
+            <td>{{ player.common_pool_share }}</td>
+        </tr>
+        {% if not player.is_thief %}
+            <tr>
+                <td>You sent sanctioning points to the Taker:</td>
+                <td>-</td>
+                <td>{{ player.sanction_points_sent }}</td>
+            </tr>
         {% endif %}
-            {% if Treat == 'Public' %}
-                <p>
-                The two players being neither Taker nor Observer {% if player.id_in_group != group.who_thief and player.id_in_group != group.who_decides %} (you) {% endif %} sent {{ firstreward }} and {{ secondreward }} to the Observer.
-                </p>
-            {% else %}
+        {% if player.is_thief %}
+            <tr>
+                <td>You received sanctioning points as a Taker:</td>
+                <td>-</td>
+                <td>{{ player.sanction_points_received }}</td>
+            </tr>
+        {% endif %}
+        {% if not player.is_thief %}
+
+            {% if session.config.treatment == 'Public' %}
+                <tr>
+                    <td>You received Addition points as an Observer:</td>
+                    <td>+</td>
+                    <td>{{ player.addition_points_received }}</td>
+                </tr>
+                <tr>
+                    <td>You received Deduction points as an Observer:</td>
+                    <td>-</td>
+                    <td>{{ player.deduction_points_received }}</td>
+                </tr>
+                <tr>
+                    <td>You sent Deduction/Addition points to the Observer:</td>
+                    <td>-</td>
+                    <td>{{ player.reward }}</td>
+                </tr>
             {% endif %}
-    {% else %}
+        {% endif %}
+        <tr class="success">
+            <th>You final payoff for this round:</th>
+            <th>=</th>
+            <th>{{ player.payoff }}</th>
+        </tr>
+    </table>
+
+
+    <h3>Actions:</h3>
+    <h4>Stage 1:</h4>
+    <table class="table table-hover table-striped">
+        <tr>
+            <td>{% if player.role == 'Taker' %} Your decision as {{ player.role }} {% else %} The Taker's
+                decision {% endif %}:
+            </td>
+            <td> {{ group.stealing|yesno:'Take, Leave' }}</td>
+        </tr>
+    </table>
+
+    {% if group.stealing %}
+        <h4>Stage 2:</h4>
+        <table class="table table-hover table-striped">
+            <tr>
+                <td>{% if player.role == 'Observer' %} Your {% else %} Observer's {% endif %}decision:</td>
+                <td>{{ group.get_decision }}</td>
+            </tr>
+        </table>
+        {% if group.get_decision == 'Report' %}
+            <h4>Stage 3:</h4>
+
+
+            <table class="table table-hover table-striped">
+                {% for p in group.no_thiefs %}
+                    <tr>
+                        <td>Player {{ forloop.counter }}{% if p == player %}<b> (You)</b>{% endif %}:</td>
+                        <td>{{ p.get_punish_display }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+        {% if group.is_sanctioned %}
+            <div class="alert alert-danger " role="alert">
+                The Taker lost 24 Points.
+            </div>
+        {% endif %}
+
+
+        {% if Treat == 'Public' %}
+            <h4>Stage 4:</h4>
+
+            <p>
+                The two players being neither Taker nor Observer
+                {% if player.id_in_group != group.who_thief and player.id_in_group != group.who_decides %}
+                    (you) {% endif %} sent {{ firstreward }} and {{ secondreward }} to the Observer.
+            </p>
+
+
+
+        {% endif %}
+
 
     {% endif %}
 
-    <h4><b>Payoffs:</b></h4>
-    <p>
-        Your final payoff from this period is <b>{{ player.payoff }}</b>.
-        {% if group.who_thief != player.id_in_group %} The Taker's payoff from this period is {{ takerpayoff }}. {% endif %}
-        {% if group.who_decides != player.id_in_group %} The Observer's payoff from this period is {{ observerpayoff }}. {% endif %}
-        {% if group.who_decides == player.id_in_group or group.who_thief == player.id_in_group %}
-            The payoff of the other two players is {{ firstbystander }} and {{ secondbystander }}.
-        {% elif player.payoff == firstbystander %}
-            The payoff of the other player is {{ secondbystander }}.
-        {% elif player.payoff == secondbystander %}
-            The payoff of the other player is {{ firstbystander }}.
-        {% endif %}
-    </p>
 
-    Your cumulative payoff from {{ round_number }} of {{ Constants.num_rounds }} rounds is <b>{{ participant.payoff }}</b>.
-    <p>
+
 
 
     {% next_button %}
 
-      {% include 'whisteblowing_game/slider_wrapper.html' with cur_section=0 %}
+    {% include 'whisteblowing_game/slider_wrapper.html' with cur_section=0 %}
 {% endblock %}

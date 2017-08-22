@@ -2,11 +2,10 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-    Your Decision as Taker!
+     Round {{ round_number }} of {{ Constants.num_rounds }}: Your Decision as Taker:
 {% endblock %}
 
 {% block content %}
-    <p align="right"> Round {{ round_number }} of {{ Constants.num_rounds }}</p>
     You have been randomly selected as the Taker in this Period.
     <p>
 {% formfield group.stealing with label="Enter your decision to Leave or Take:" %}
