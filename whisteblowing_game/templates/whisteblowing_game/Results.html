@@ -36,21 +36,24 @@
         {% if not player.is_thief %}
 
             {% if session.config.treatment == 'Public' %}
-                <tr>
-                    <td>You received Addition points as an Observer:</td>
-                    <td>+</td>
-                    <td>{{ player.addition_points_received }}</td>
-                </tr>
-                <tr>
-                    <td>You received Deduction points as an Observer:</td>
-                    <td>-</td>
-                    <td>{{ player.deduction_points_received }}</td>
-                </tr>
-                <tr>
-                    <td>You sent Deduction/Addition points to the Observer:</td>
-                    <td>-</td>
-                    <td>{{ player.reward }}</td>
-                </tr>
+                {% if  player.is_decision_maker %}
+                    <tr>
+                        <td>You received Addition points as an Observer:</td>
+                        <td>+</td>
+                        <td>{{ player.addition_points_received }}</td>
+                    </tr>
+                    <tr>
+                        <td>You received Deduction points as an Observer:</td>
+                        <td>-</td>
+                        <td>{{ player.deduction_points_received }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td>You sent Deduction/Addition points to the Observer:</td>
+                        <td>-</td>
+                        <td>{{ reward }}</td>
+                    </tr>
+                {% endif %}
             {% endif %}
         {% endif %}
         <tr class="success">

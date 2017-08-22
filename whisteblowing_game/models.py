@@ -99,7 +99,7 @@ class Group(BaseGroup):
             self.decision_maker.addition_points_received = sum([p.reward or 0
                                                                 for p in self.no_thiefs
                                                                 if (p.reward or 0) > 0]) * Constants.reward_factor
-            self.decision_maker.deduction_points_received = sum([p.reward or 0
+            self.decision_maker.deduction_points_received = sum([abs(p.reward) or 0
                                                                  for p in self.no_thiefs
                                                                  if (p.reward or 0) < 0]) * Constants.reward_factor
             self.thief.sanction_points_received = self.is_sanctioned * \
@@ -111,7 +111,8 @@ class Group(BaseGroup):
                        p.sanction_points_sent - \
                        p.sanction_points_received + \
                        p.addition_points_received - \
-                       p.deduction_points_received
+                       p.deduction_points_received - \
+                       (abs(p.reward or 0))
 
 
 class Player(BasePlayer):

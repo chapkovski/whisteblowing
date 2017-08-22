@@ -83,7 +83,8 @@ class ResultsWaitPage(WaitPage):
 
 
 class Results(Page):
-    ...
+    def vars_for_template(self):
+        return {'reward': abs(self.player.reward or 0)}
 
 
 page_sequence = [
