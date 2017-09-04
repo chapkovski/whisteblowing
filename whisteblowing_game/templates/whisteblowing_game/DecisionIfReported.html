@@ -7,14 +7,15 @@
 {% endblock %}
 
 {% block content %}
+    <p align="right"> Round {{ round_number }} of {{ Constants.num_rounds }}</p>
 
     {% if player.id_in_group == group.who_decides %}
     <p>
-        The Taker chose Take. You have been selected as Observer. Your decision was <i>{{ group.get_decision }}</i>.
+        You have been selected as Observer. Your decision was <i>{{ group.get_decision }}</i>.
     </p>
     {% else %}
     <p>
-        The Taker chose Take. You have not been selected as Observer. The Observer's decision was <i>{{ group.get_decision }}</i>.
+        You have not been selected as Observer. The Observer's decision was <i>{{ group.get_decision }}</i>.
     </p>
 {% endif %}
 

@@ -2,16 +2,15 @@
 
 
     <p align="justify">
-        Each of the three players not selected as Taker decides between three actions as potential <i><b>Observer</b></i>.
-        Although each player makes this decision, only one decision will be randomly chosen and implemented in case the Taker decided to Take.
-        This means, if the Taker chose Take, the decision of one randomly determined player (actual Observer) is executed.
-        The decisions of the other players remain inconsequential. If the Taker chose Leave, the decisions of all three potential Observers are inconsequential.
-        Each player makes a decision as if he/she were the actual Observer.
+    Each of the three players not selected as Taker is a potential <i><b>Observer</b></i>. Each potential observer decides between three actions:
     <p>
     <ul align="justify">
-    <li><i><b>Abstain</b></i>: The payoffs are unaffected. The Taker keeps 26 points. The Observer and the rest of the group receive 8 points. </li>
-    <li><i><b>Report</b></i>: The Observer reveals the Taker to the rest of the group. Thereafter, each of the three players can individually decide to
-    Sanction the Taker (see next page). </li>
+    <li><i><b>Abstain</b></i>: The Observer does not intervene. The Taker keeps {{ earnings_thief }} points. The Observer and the two Bystanders receive {{ Constants.personal_endowment }} points. </li>
+    <li><i><b>Report</b></i>: The Observer reveals the Taker to the rest of the group. Thereafter, the Observer and the two Bystanders can individually decide to
+    Sanction the Taker (see Stage 3). </li>
     <li><i><b>Sanction</b></i>: The Observer reduces the payoff of the Taker by 24 points (from 26 points to 2 points). The Observer pays a cost of 6 points. The Observer's final payoff is 2 points.
-    The payoff of the two other players is unaffected.</li>
+    The payoffs of the two Bystanders are unaffected.</li>
     </ul>
+    <p align="justify">
+    After each of the three players has decided, one of them is randomly selected as actual Observer. The other two players are Bystanders.
+    Only the decision of the actual Observer is implemented. The decisions of two Bystanders remain inconsequential.

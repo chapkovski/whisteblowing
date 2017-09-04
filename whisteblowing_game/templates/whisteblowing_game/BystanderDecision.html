@@ -13,9 +13,8 @@
     {{ number_punishments }} players decided to sanction and paid the costs.
     The Observer chose to {{ group.observer_decision|yesno:'sanction, abstain' }} </p>
 {% endif %}
-    <p> The two group members being neither Taker nor Observer can now send up to two deduction or additions points to the Observer.
-        Please indicate whether you want to send any Deduction or Addition Points to the Observer.
-        Enter your decision to send Deduction or Addition Points to the Observer. </p>
+    <p> The two Bystanders can now send up to two Deduction or Additions Points to the Observer.
+    </p>
 {% formfield player.reward with label="Enter your decision to send Deduction or Addition Points to the Observer:" %}
     {% next_button %}
 

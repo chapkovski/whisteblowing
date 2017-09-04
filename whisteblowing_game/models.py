@@ -2,6 +2,10 @@ from otree.api import (
     models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     Currency as c, currency_range
 )
+from django import forms
+import csv
+from .renderers import MyCustomRenderer
+
 
 import random
 
@@ -28,28 +32,23 @@ class Constants(BaseConstants):
     REWARD_CHOICES = [(-2, '2 Deduction Points'), (-1, '1 Deduction Point'), (0, 'No Points'), (1, '1 Addition Point'),
                       (2, '2 Addition Points')]
     STEALING_CHOICES = [(False, 'Leave'), (True, 'Take')]
-    ANSWERS1 = [(1, 'The Taker gets a payoff of 26. The Observer gets a payoff of 2.'),
-                (2, 'The Taker gets a payoff of 8. The Observer gets a payoff of 2.'),
-                (3, 'The Taker and the Observer receive an equal payoff of 8.'),
-                (4, 'The Taker and the Observer receive an equal payoff of 2.')]
-    ANSWERS2 = [(1, 'One of the two players who sanction is the Observer'),
-                (2, 'Only one of the two players pays the costs of sanctioning.'),
-                (3, 'Both players pay the costs of sanctioning.'),
-                (4, 'It is possible that the Taker will not lose Points.')]
 
     InstructionsStealing_template = 'whisteblowing_game/InstructionsStealing.html'
     InstructionsAction_template = 'whisteblowing_game/InstructionsAction.html'
     InstructionsPunish_template = 'whisteblowing_game/InstructionsPunish.html'
     InstructionsReward_template = 'whisteblowing_game/InstructionsReward.html'
 
+    with open('whisteblowing_game/qs_to_add.csv') as f:
+        questions = list(csv.DictReader(f))
+
 
 class Subsession(BaseSubsession):
-    ...
-
     def before_session_starts(self):
         for g in self.get_groups():
             g.who_thief = random.randint(1, Constants.players_per_group)
             g.who_decides = random.choice(g.no_thiefs).id_in_group
+        self.player_set.update(treatment=self.session.config.get('treatment'))
+
 
 
 class Group(BaseGroup):
@@ -70,6 +69,10 @@ class Group(BaseGroup):
     @property
     def no_thiefs(self):
         return [p for p in self.get_players() if p.role() != 'Taker']
+
+    @property
+    def bystanders(self):
+        return [p for p in self.get_players() if p.role() == 'Bystander']
 
     @property
     def thief(self):
@@ -132,15 +135,7 @@ class Player(BasePlayer):
     sanction_points_received = models.IntegerField(default=0)
     addition_points_received = models.IntegerField(default=0)
     deduction_points_received = models.IntegerField(default=0)
-    CQ1 = models.IntegerField(choices=Constants.ANSWERS1,
-                              widget=widgets.RadioSelect(),
-                              verbose_name="Question 1: If the Taker chooses Take and the Observer chooses Sanction, which of the following statements is true:",
-                              )
-    CQ2 = models.IntegerField(choices=Constants.ANSWERS2,
-                              widget=widgets.RadioSelect(),
-                              verbose_name="Question 2: Imagine the Taker chooses Take and the Observer chooses Report. If in the following 2 of 3 players decide to Sanction the Taker, which of the following statements is true:",
-                              initial=None
-                              )
+    treatment = models.CharField()
 
     @property
     def is_decision_maker(self):
@@ -165,3 +160,11 @@ class Player(BasePlayer):
             return self.get_action_display()
         else:
             return self.get_punish_display()
+
+for i in Constants.questions:
+    Player.add_to_class(i['qname'],
+                        models.CharField(verbose_name=i['verbose'],
+                        widget=forms.RadioSelect(renderer=MyCustomRenderer,
+                        attrs={ 'required': 'true'}),
+                        choices=[i['option1'], i['option2']],
+                        null=False, blank=False, default=''))

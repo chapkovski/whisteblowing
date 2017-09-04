@@ -1,0 +1,8 @@
+number,qname,verbose,option1,option2,correct,treatment
+1,q1_Private,"What are the preliminary earnings of the Taker if he chose Take?",17,26,26,Private
+2,q2_Private,"What are the earnings of the Observer if the Taker chose Take and the Observer chose Sanction?",2,8,2,Private
+3,q3_Private,"How many points does the Taker lose if two players chose Sanction?",24,48,24,Private
+4,q1_Public,"What are the preliminary earnings of the Taker, if he chose Take?",17,26,26,Public
+5,q2_Public,"What are the earnings of the Observer if the Taker chose Take and the Observer chose Sanction?",2,8,2,Public
+6,q3_Public,"How many points does the Taker lose if two players chose Sanction?",24,48,24,Public
+7,q4_Public,"How many points does the recipient of a Reward Point receive?",1,3,3,Public

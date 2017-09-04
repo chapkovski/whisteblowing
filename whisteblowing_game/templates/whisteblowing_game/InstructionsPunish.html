@@ -1,13 +1,11 @@
 {% load otree_tags staticfiles %}
 
 
-
 <p align="justify">
-    If the Taker chose to Take and the Observer reported, each of the three players not
-    selected as Taker decides again between Sanction and Abstain.
-    In this case, the Taker's payoff is reduced by 24 points if at least one of the three players selects Sanction.
-    Each player selecting Sanction has to pay a cost of 6 points, irrespective of how many other players sanction.
-    However, the Taker can only be sanctioned once. If more than one player sanction, the Taker's payoff is still reduced only by 24 points.
-    If none of the three players selects Sanction, the payoff of the Taker is unaffected.
+    If the Observer chose to Report, the Observer and the Bystanders individually decides whether to sanction the Taker.
+    The Taker's payoff is reduced by 24 points if at least one of the three players selects Sanction.
+    However, the Taker can loose at most 24 points. If more than one player sanction, the Taker's payoff is still reduced by 24 points.
+    Each player who selects Sanction pays a cost of 6 points, irrespective of how many other players sanction.
+    If none of the three players sanctions, the payoff of the Taker remains unaffected.
 </p>
  

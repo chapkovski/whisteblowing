@@ -7,7 +7,12 @@ from .models import Constants
 def vars_for_all_templates(self):
     max_sections = 4 if self.session.config['treatment'] == 'Public' else 3
     return {'round_number': self.round_number,
-            'max_sections': max_sections}
+            'max_sections': max_sections,
+            'earnings_thief': Constants.personal_endowment + Constants.stealing_amount,
+            'equal_split': round(Constants.common_pool / Constants.players_per_group),
+            'earnings_from_equal_split': round(
+                Constants.personal_endowment + Constants.common_pool / Constants.players_per_group)
+            }
 
 
 class Introduction(Page):
@@ -17,18 +22,26 @@ class Introduction(Page):
 
 class CQs(Page):
     form_model = models.Player
-    form_fields = ['CQ1', 'CQ2']
 
     def is_displayed(self):
         return self.round_number == 1
 
-    def CQ1_error_message(self, value):
-        if not (value == 4):
-            return 'Your answer is not correct. Please try again.'
+    def get_form_fields(self):
+        return [i['qname'] for i in Constants.questions
+                if i['treatment'] == self.player.treatment]
 
-    def CQ2_error_message(self, value):
-        if not (value == 3):
-            return 'Your answer is not correct. Please try again.'
+class CQresults(Page):
+    def vars_for_template(self):
+        curquestions = [i for i in Constants.questions
+                        if i['treatment'] == self.player.treatment]
+        fields_to_get = [i['qname'] for i in curquestions]
+        results = [getattr(self.player, f) for f in fields_to_get]
+        qtexts = [i['verbose'] for i in curquestions]
+        qsolutions = [i['correct'] for i in curquestions]
+        is_correct = [True if i[0] == i[1] else False for i in zip(results,
+                                                                   qsolutions)]
+        data = zip(qtexts, results, qsolutions, is_correct)
+        return {'data': data}
 
 
 class TakerDecision(Page):
@@ -88,8 +101,9 @@ class Results(Page):
 
 
 page_sequence = [
-    # Introduction,
-    # CQs,
+    #Introduction,
+    CQs,
+    CQresults,
     TakerDecision,
     ObserverDecision,
     WaitPage,

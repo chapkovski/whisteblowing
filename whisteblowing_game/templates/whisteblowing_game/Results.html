@@ -5,17 +5,87 @@
     Results
 {% endblock %}
 
+
 {% block content %}
+
+
+    <table class="table table-hover table-striped">
+     <colgroup> <col width="70%"> <col width="30%"> </colgroup>
+        <tr>
+            <td> Your Role:</td>
+            <td align="left"> {{ player.role }} </td>
+        </tr>
+    </table>
+
+    <h3>Actions:</h3>
+    <h5><b>Stage 1:</b></h5>
+    <table class="table table-hover table-striped">
+         <colgroup> <col width="70%"> <col width="30%"> </colgroup>
+        <tr>
+            <td>{% if player.role == 'Taker' %} Your decision as {{ player.role }} {% else %} The Taker's
+                decision {% endif %}:
+            </td>
+            <td align="left"> {{ group.stealing|yesno:'Take, Leave' }}</td>
+        </tr>
+    </table>
+
+    {% if group.stealing %}
+        <h5><b>Stage 2:</b></h5>
+        <table class="table table-hover table-striped">
+            <colgroup> <col width="70%"> <col width="30%"> </colgroup>
+            <tr>
+                <td>{% if player.role == 'Observer' %} Your decision as {{ player.role }} {% else %} The Observer's decision {% endif %}:</td>
+                <td align="left">{{ group.get_decision }}</td>
+            </tr>
+        </table>
+        {% if group.get_decision == 'Report' %}
+            <h5><b>Stage 3:</b></h5>
+            <table class="table table-hover table-striped">
+                <colgroup> <col width="70%"> <col width="30%"> </colgroup>
+                {% for p in group.no_thiefs %}
+                    <tr>
+                        <td>Player {{ forloop.counter }}{% if p == player %}<b> (You)</b>{% endif %}:</td>
+                        <td>{{ p.get_punish_display }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+        {% if group.is_sanctioned %}
+            <div class="alert alert-danger " role="alert">
+                The Taker lost 24 Points.
+            </div>
+        {% endif %}
+
+        {% if player.treatment == 'Public' %}
+            <h5><b>Stage 4:</b></h5>
+            <table class="table table-hover table-striped">
+                <colgroup> <col width="70%"> <col width="30%"> </colgroup>
+                {% for p in group.bystanders %}
+                    <tr>
+                        <td>Bystander {{ forloop.counter }}{% if p == player %}<b> (You)</b>{% endif %}:</td>
+                        <td>{{ p.get_reward_display }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        {% endif %}
+
+
+    {% endif %}
+
+
+
     <h3>Payoff:</h3>
 
     <table class="table table-hover table-striped">
+        <colgroup> <col width="70%"> <col width="5%"> <col width="25%"></colgroup>
         <tr>
             <td>Initial endowment:</td>
             <td>+</td>
             <td>{{ Constants.personal_endowment }}</td>
         </tr>
         <tr>
-            <td>Your share from common pool:</td>
+            <td>Your share from the common pool:</td>
             <td>+</td>
             <td>{{ player.common_pool_share }}</td>
         </tr>
@@ -34,16 +104,15 @@
             </tr>
         {% endif %}
         {% if not player.is_thief %}
-
             {% if session.config.treatment == 'Public' %}
-                {% if  player.is_decision_maker %}
+                {% if player.is_decision_maker %}
                     <tr>
-                        <td>You received Addition points as an Observer:</td>
+                        <td>Your gain from Addition points:</td>
                         <td>+</td>
                         <td>{{ player.addition_points_received }}</td>
                     </tr>
                     <tr>
-                        <td>You received Deduction points as an Observer:</td>
+                        <td>Your loss from Deduction points:</td>
                         <td>-</td>
                         <td>{{ player.deduction_points_received }}</td>
                     </tr>
@@ -62,64 +131,6 @@
             <th>{{ player.payoff }}</th>
         </tr>
     </table>
-
-
-    <h3>Actions:</h3>
-    <h4>Stage 1:</h4>
-    <table class="table table-hover table-striped">
-        <tr>
-            <td>{% if player.role == 'Taker' %} Your decision as {{ player.role }} {% else %} The Taker's
-                decision {% endif %}:
-            </td>
-            <td> {{ group.stealing|yesno:'Take, Leave' }}</td>
-        </tr>
-    </table>
-
-    {% if group.stealing %}
-        <h4>Stage 2:</h4>
-        <table class="table table-hover table-striped">
-            <tr>
-                <td>{% if player.role == 'Observer' %} Your {% else %} Observer's {% endif %}decision:</td>
-                <td>{{ group.get_decision }}</td>
-            </tr>
-        </table>
-        {% if group.get_decision == 'Report' %}
-            <h4>Stage 3:</h4>
-
-
-            <table class="table table-hover table-striped">
-                {% for p in group.no_thiefs %}
-                    <tr>
-                        <td>Player {{ forloop.counter }}{% if p == player %}<b> (You)</b>{% endif %}:</td>
-                        <td>{{ p.get_punish_display }}</td>
-                    </tr>
-                {% endfor %}
-            </table>
-        {% endif %}
-        {% if group.is_sanctioned %}
-            <div class="alert alert-danger " role="alert">
-                The Taker lost 24 Points.
-            </div>
-        {% endif %}
-
-
-        {% if Treat == 'Public' %}
-            <h4>Stage 4:</h4>
-
-            <p>
-                The two players being neither Taker nor Observer
-                {% if player.id_in_group != group.who_thief and player.id_in_group != group.who_decides %}
-                    (you) {% endif %} sent {{ firstreward }} and {{ secondreward }} to the Observer.
-            </p>
-
-
-
-        {% endif %}
-
-
-    {% endif %}
-
-
 
 
 

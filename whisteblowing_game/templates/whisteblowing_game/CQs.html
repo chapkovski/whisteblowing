@@ -1,5 +1,5 @@
 {% extends "global/Page.html" %}
-{% load staticfiles otree_tags %}
+{% load staticfiles otree_tags floppyforms %}
 
 {% block title %}
 Comprehension questions
@@ -7,13 +7,14 @@ Comprehension questions
 
 {% block content %}
 
-    <p align="justify"> Before the experiment starts, please answer the following questions to ensure that all participants
+    <p align="justify"> Please answer the following comprehension questions to ensure that all participants
     have understood the instructions.
+        For each correct answer, an additional 0.1$ will be added to your final earnings at the end of the experiment.
 
-    {% formfield player.CQ1 %}
-    {% formfield player.CQ2 %}
-
-        {% include 'whisteblowing_game/slider_wrapper.html' %}
+  <table class='table table-hover table-striped'>
+{{form}}
+</table>
     {% next_button %}
+        {% include 'whisteblowing_game/slider_wrapper.html' %}
 
 {% endblock %}

@@ -3,12 +3,12 @@
 {% load staticfiles otree_tags %}
 
 {% block title %}
-     Round {{ round_number }} of {{ Constants.num_rounds }}: Your Decision as Observer
+     Round {{ round_number }} of {{ Constants.num_rounds }}: Your Decision as potential Observer
 {% endblock %}
 
 {% block content %}
-
-    <p align="justify">You have not been randomly selected as Taker in this Period. However, you can still be randomly chosen as Observer.
+    <p align="right"> Round {{ round_number }} of {{ Constants.num_rounds }}</p>
+    <p align="justify">You have not been randomly selected as Taker. You can be randomly selected as Observer.
 {% formfield player.action with label="Enter your decision to Abstain, Report or Sanction:" %}
     <p>
         {% next_button %}
