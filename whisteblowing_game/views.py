@@ -101,7 +101,7 @@ class Results(Page):
 
 
 page_sequence = [
-    #Introduction,
+    Introduction,
     CQs,
     CQresults,
     TakerDecision,
