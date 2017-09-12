@@ -19,7 +19,6 @@ class Introduction(Page):
     def is_displayed(self):
         return self.round_number == 1
 
-
 class CQs(Page):
     form_model = models.Player
 
