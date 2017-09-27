@@ -3,7 +3,6 @@ from . import models
 from ._builtin import Page, WaitPage
 from .models import Constants
 
-
 def vars_for_all_templates(self):
     max_sections = 4 if self.session.config['treatment'] == 'Public' else 3
     return {'round_number': self.round_number,
@@ -26,21 +25,26 @@ class CQs(Page):
         return self.round_number == 1
 
     def get_form_fields(self):
-        return [i['qname'] for i in Constants.questions
-                if i['treatment'] == self.player.treatment]
+        return [i['name'] for i in Constants.questions if i['treatment'] == self.player.treatment]
+
+    def before_next_page(self):
+        self.player.set_payoffs_from_cq()
 
 class CQresults(Page):
     def vars_for_template(self):
         curquestions = [i for i in Constants.questions
                         if i['treatment'] == self.player.treatment]
-        fields_to_get = [i['qname'] for i in curquestions]
+        fields_to_get = [i['name'] for i in curquestions]
         results = [getattr(self.player, f) for f in fields_to_get]
         qtexts = [i['verbose'] for i in curquestions]
         qsolutions = [i['correct'] for i in curquestions]
         is_correct = [True if i[0] == i[1] else False for i in zip(results,
                                                                    qsolutions)]
         data = zip(qtexts, results, qsolutions, is_correct)
-        return {'data': data}
+        number_correct = sum(i for i in is_correct)
+        return {'data': data,
+                'number_correct': number_correct}
+
 
 
 class TakerDecision(Page):

@@ -5,8 +5,6 @@ from otree.api import (
 from django import forms
 import csv
 from .renderers import MyCustomRenderer
-
-
 import random
 
 author = 'H.Rauhut, G.Kanitsar, Ph.Chapkovski, University of Zurich'
@@ -27,6 +25,7 @@ class Constants(BaseConstants):
     reward_factor = 3
     penalty_tokens = 6
     destruction_factor = 0.5
+    payment_per_cq = 0.1
     ACTION_CHOICES = [(0, 'Abstain'), (1, 'Report'), (2, 'Sanction')]
     PUNISH_CHOICES = [(0, 'Abstain'), (1, 'Sanction')]
     REWARD_CHOICES = [(-2, '2 Deduction Points'), (-1, '1 Deduction Point'), (0, 'No Points'), (1, '1 Addition Point'),
@@ -42,13 +41,14 @@ class Constants(BaseConstants):
         questions = list(csv.DictReader(f))
 
 
+
+
 class Subsession(BaseSubsession):
     def before_session_starts(self):
         for g in self.get_groups():
             g.who_thief = random.randint(1, Constants.players_per_group)
             g.who_decides = random.choice(g.no_thiefs).id_in_group
         self.player_set.update(treatment=self.session.config.get('treatment'))
-
 
 
 class Group(BaseGroup):
@@ -82,7 +82,6 @@ class Group(BaseGroup):
         if self.stealing == 0:
             for p in self.get_players():
                 p.common_pool_share = Constants.common_pool / Constants.players_per_group
-
         else:
             for p in self.no_thiefs:
                 p.common_pool_share = (Constants.common_pool -
@@ -136,6 +135,48 @@ class Player(BasePlayer):
     addition_points_received = models.IntegerField(default=0)
     deduction_points_received = models.IntegerField(default=0)
     treatment = models.CharField()
+    payoff_cq = models.DecimalField(max_digits=2, decimal_places=1)
+    """Monkey Version"""
+    q1pr = models.CharField(verbose_name=Constants.questions[0]['verbose'],
+                            widget=forms.RadioSelect(renderer=MyCustomRenderer, attrs={'required': 'true'}),
+                            choices=[Constants.questions[0]['option1'], Constants.questions[0]['option2']],
+                            null=False, blank=False, default='')
+    q2pr = models.CharField(verbose_name=Constants.questions[1]['verbose'],
+                            widget=forms.RadioSelect(renderer=MyCustomRenderer, attrs={'required': 'true'}),
+                            choices=[Constants.questions[1]['option1'], Constants.questions[1]['option2']],
+                            null=False, blank=False, default='')
+    q3pr = models.CharField(verbose_name=Constants.questions[2]['verbose'],
+                            widget=forms.RadioSelect(renderer=MyCustomRenderer, attrs={'required': 'true'}),
+                            choices=[Constants.questions[2]['option1'], Constants.questions[2]['option2']],
+                            null=False, blank=False, default='')
+    q1pb = models.CharField(verbose_name=Constants.questions[3]['verbose'],
+                            widget=forms.RadioSelect(renderer=MyCustomRenderer, attrs={'required': 'true'}),
+                            choices=[Constants.questions[3]['option1'], Constants.questions[3]['option2']],
+                            null=False, blank=False, default='')
+    q2pb = models.CharField(verbose_name=Constants.questions[4]['verbose'],
+                            widget=forms.RadioSelect(renderer=MyCustomRenderer, attrs={'required': 'true'}),
+                            choices=[Constants.questions[4]['option1'], Constants.questions[4]['option2']],
+                            null=False, blank=False, default='')
+    q3pb = models.CharField(verbose_name=Constants.questions[5]['verbose'],
+                            widget=forms.RadioSelect(renderer=MyCustomRenderer, attrs={'required': 'true'}),
+                            choices=[Constants.questions[5]['option1'], Constants.questions[5]['option2']],
+                            null=False, blank=False, default='')
+    q4pb = models.CharField(verbose_name=Constants.questions[6]['verbose'],
+                            widget=forms.RadioSelect(renderer=MyCustomRenderer, attrs={'required': 'true'}),
+                            choices=[Constants.questions[6]['option1'], Constants.questions[6]['option2']],
+                            null=False, blank=False, default='')
+
+    def set_payoffs_from_cq(self):
+        curquestions = [i for i in Constants.questions
+                        if i['treatment'] == self.treatment]
+        fields_to_get = [i['name'] for i in curquestions]
+        results = [getattr(self, f) for f in fields_to_get]
+        qsolutions = [i['correct'] for i in curquestions]
+        is_correct = [True if i[0] == i[1] else False for i in zip(results,
+                                                                   qsolutions)]
+        correct_questions = sum(i for i in is_correct)
+        self.payoff_cq = Constants.payment_per_cq * correct_questions
+
 
     @property
     def is_decision_maker(self):
@@ -161,10 +202,11 @@ class Player(BasePlayer):
         else:
             return self.get_punish_display()
 
+""" Seems not to Work?? 
 for i in Constants.questions:
-    Player.add_to_class(i['qname'],
-                        models.CharField(verbose_name=i['verbose'],
-                        widget=forms.RadioSelect(renderer=MyCustomRenderer,
-                        attrs={ 'required': 'true'}),
-                        choices=[i['option1'], i['option2']],
-                        null=False, blank=False, default=''))
+%    Player.add_to_class(i['name'],
+%                        models.CharField(verbose_name=i['verbose'],
+%                        widget=forms.RadioSelect(renderer=MyCustomRenderer, attrs={ 'required': 'true'}),
+%                        choices=[i['option1'], i['option2']],
+%                        null=False, blank=False, default=''))
+"""

@@ -6,13 +6,13 @@ Comprehension questions
 {% endblock %}
 
 {% block content %}
-
     <p align="justify"> Please answer the following comprehension questions to ensure that all participants
     have understood the instructions.
-        For each correct answer, an additional 0.1$ will be added to your final earnings at the end of the experiment.
+
+        For each correct answer, an additional {{ Constants.payment_per_cq }}$ will be added to your final earnings at the end of the experiment.
 
   <table class='table table-hover table-striped'>
-{{form}}
+  {{ form }}
 </table>
     {% next_button %}
         {% include 'whisteblowing_game/slider_wrapper.html' %}

@@ -9,7 +9,7 @@
 {% block content %}
     <p align="justify">
     In this study, you play in a group of {{ Constants.players_per_group }} players for {{ Constants.num_rounds }} rounds.
-    The groups remain constant throughout the study.
+    The group remains constant throughout the study.
     Each group consists of 1 Taker, 1 Observer and 2 Bystanders.
     These roles are randomly distributed among the {{ Constants.players_per_group }} group members in each round.
     At the beginning of a round, each player receives an initial endowment of {{ Constants.personal_endowment }} points.
@@ -17,8 +17,8 @@
     <p align="justify">
     Your earnings from each round depend on the decisions of you and your group members. At the end of the study, you receive your aggregated points from {{ Constants.num_rounds }} rounds.
     Points are converted into real money at a rate of 40 points = 1$.
-    In addition you receive a participation fee of {{session.config.participation_fee}} (if you finish the experiment?).
-    On average participants earn 5$ (including the participation fee).<br>
+    In addition you receive a participation fee of {{session.config.participation_fee}}.
+    Overall, participants earn on average 5$ from this study.<br>
 
     {% include 'whisteblowing_game/full_instructions.html'%}
 

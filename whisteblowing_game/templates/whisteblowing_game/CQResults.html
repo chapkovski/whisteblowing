@@ -1,5 +1,5 @@
 {% extends "global/Page.html" %}
-{% load staticfiles otree_tags %}
+{% load staticfiles otree_tags floppyforms%}
 
 {% block title %}
     Answers to comprehension questions
@@ -33,6 +33,10 @@
 
   </tbody>
 </table>
+
+    <p align="justify">
+    {{ player.payoff_cq }} $ will be added to your final payoff at the end of the study.
+    </p>
 
     {% next_button %}
     {% include 'whisteblowing_game/slider_wrapper.html' %}
